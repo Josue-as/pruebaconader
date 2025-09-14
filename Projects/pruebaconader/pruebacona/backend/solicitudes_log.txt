@@ -1,0 +1,5 @@
+14/9/2025 2:02:47: Nombre=Josue, Descripcion=ds, Fecha=2025-09-14, Estado=activo, TipoSolicitudId=1
+14/9/2025 2:06:21: Nombre=Daniel, Descripcion=Mouse. El que tengo actualmente dejo de funcionar., Fecha=2025-09-14, Estado=activo, TipoSolicitudId=3
+14/9/2025 12:42:11: Nombre=Josue, Descripcion=Mouse. El que tengo actualmente dejo de funcionar., Fecha=2025-09-14, Estado=activo, TipoSolicitudId=1
+14/9/2025 13:30:17: Nombre=Danielr, Descripcion=2 resmas de hojas blancas, Fecha=2025-09-14, Estado=activo, TipoSolicitudId=3
+14/9/2025 13:35:14: Nombre=Noe, Descripcion=Reunión con proveedores, Fecha=2025-09-12, Estado=activo, TipoSolicitudId=4
