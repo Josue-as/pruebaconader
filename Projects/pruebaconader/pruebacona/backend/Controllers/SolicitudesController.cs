@@ -9,18 +9,23 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class SolicitudesController : ControllerBase
     {
-        private static List<Solicitud> solicitudes = new List<Solicitud>();
+        private readonly GestionesDbContext _context;
+
+        public SolicitudesController(GestionesDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
-        public IEnumerable<Solicitud> Get()
+        public ActionResult<IEnumerable<Solicitud>> Get()
         {
-            return solicitudes;
+            return _context.Solicitudes.ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Solicitud> GetById(int id)
         {
-            var solicitud = solicitudes.FirstOrDefault(s => s.Id == id);
+            var solicitud = _context.Solicitudes.Find(id);
             if (solicitud == null) return NotFound();
             return solicitud;
         }
@@ -28,30 +33,39 @@ namespace backend.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Solicitud nuevaSolicitud)
         {
-            nuevaSolicitud.Id = solicitudes.Count + 1;
-            solicitudes.Add(nuevaSolicitud);
+            // Log para depuración en archivo dentro de carpeta Logs
+            var logDir = "Logs";
+            if (!System.IO.Directory.Exists(logDir))
+                System.IO.Directory.CreateDirectory(logDir);
+            var logPath = System.IO.Path.Combine(logDir, "solicitudes_log.txt");
+            var logMsg = $"{DateTime.Now}: Nombre={nuevaSolicitud.Nombre}, Descripcion={nuevaSolicitud.Descripcion}, Fecha={nuevaSolicitud.Fecha}, Estado={nuevaSolicitud.Estado}, TipoSolicitudId={nuevaSolicitud.TipoSolicitudId}\n";
+            System.IO.File.AppendAllText(logPath, logMsg);
+            _context.Solicitudes.Add(nuevaSolicitud);
+            _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = nuevaSolicitud.Id }, nuevaSolicitud);
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Solicitud actualizada)
         {
-            var solicitud = solicitudes.FirstOrDefault(s => s.Id == id);
+            var solicitud = _context.Solicitudes.Find(id);
             if (solicitud == null) return NotFound();
             solicitud.Nombre = actualizada.Nombre;
             solicitud.Descripcion = actualizada.Descripcion;
             solicitud.Fecha = actualizada.Fecha;
             solicitud.Estado = actualizada.Estado;
             solicitud.TipoSolicitudId = actualizada.TipoSolicitudId;
+            _context.SaveChanges();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var solicitud = solicitudes.FirstOrDefault(s => s.Id == id);
+            var solicitud = _context.Solicitudes.Find(id);
             if (solicitud == null) return NotFound();
-            solicitudes.Remove(solicitud);
+            _context.Solicitudes.Remove(solicitud);
+            _context.SaveChanges();
             return NoContent();
         }
     }

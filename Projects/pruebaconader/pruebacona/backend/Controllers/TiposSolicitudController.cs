@@ -9,18 +9,23 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class TiposSolicitudController : ControllerBase
     {
-        private static List<TipoSolicitud> tipos = new List<TipoSolicitud>();
+        private readonly GestionesDbContext _context;
+
+        public TiposSolicitudController(GestionesDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
-        public IEnumerable<TipoSolicitud> Get()
+        public ActionResult<IEnumerable<TipoSolicitud>> Get()
         {
-            return tipos;
+            return _context.TipoDeSolicitudes.ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<TipoSolicitud> GetById(int id)
         {
-            var tipo = tipos.FirstOrDefault(t => t.Id == id);
+            var tipo = _context.TipoDeSolicitudes.Find(id);
             if (tipo == null) return NotFound();
             return tipo;
         }
@@ -28,28 +33,34 @@ namespace backend.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] TipoSolicitud nuevoTipo)
         {
-            nuevoTipo.Id = tipos.Count + 1;
-            tipos.Add(nuevoTipo);
+            if (string.IsNullOrEmpty(nuevoTipo.Estado))
+            {
+                nuevoTipo.Estado = "activo";
+            }
+            _context.TipoDeSolicitudes.Add(nuevoTipo);
+            _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = nuevoTipo.Id }, nuevoTipo);
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] TipoSolicitud actualizado)
         {
-            var tipo = tipos.FirstOrDefault(t => t.Id == id);
+            var tipo = _context.TipoDeSolicitudes.Find(id);
             if (tipo == null) return NotFound();
             tipo.Nombre = actualizado.Nombre;
             tipo.Descripcion = actualizado.Descripcion;
             tipo.Estado = actualizado.Estado;
+            _context.SaveChanges();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var tipo = tipos.FirstOrDefault(t => t.Id == id);
+            var tipo = _context.TipoDeSolicitudes.Find(id);
             if (tipo == null) return NotFound();
-            tipos.Remove(tipo);
+            _context.TipoDeSolicitudes.Remove(tipo);
+            _context.SaveChanges();
             return NoContent();
         }
     }
