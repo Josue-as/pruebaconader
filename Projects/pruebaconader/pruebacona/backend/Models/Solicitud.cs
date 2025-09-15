@@ -1,3 +1,6 @@
+// Modelo de datos para la entidad Solicitud.
+// Representa una solicitud registrada en el sistema, incluyendo nombre, descripción, fecha, estado y el tipo asociado.
+// Utilizado por Entity Framework para persistencia y consultas en la base de datos.
 namespace backend.Models
 {
     public class Solicitud

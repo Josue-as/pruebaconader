@@ -1,3 +1,6 @@
+// Modelo de datos para la entidad TipoSolicitud.
+// Representa un tipo de solicitud en el sistema, incluyendo nombre, descripción y estado.
+// Utilizado por Entity Framework para persistencia y consultas en la base de datos.
 namespace backend.Models
 {
     public class TipoSolicitud

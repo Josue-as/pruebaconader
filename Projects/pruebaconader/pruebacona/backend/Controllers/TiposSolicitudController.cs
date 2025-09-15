@@ -1,3 +1,6 @@
+// Controlador API para la entidad TipoSolicitud.
+// Expone endpoints RESTful para operaciones CRUD sobre tipos de solicitud.
+// Utiliza Entity Framework y GestionesDbContext para persistencia y consulta de datos.
 using Microsoft.AspNetCore.Mvc;
 using backend.Models;
 using System.Collections.Generic;

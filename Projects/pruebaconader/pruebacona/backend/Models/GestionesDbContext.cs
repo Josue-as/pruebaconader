@@ -1,3 +1,6 @@
+// Contexto principal de la base de datos para la aplicación Gestiones.
+// Define las tablas Solicitudes y TipoDeSolicitudes usando Entity Framework Core.
+// Permite la persistencia y consulta de datos desde los controladores.
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Models
